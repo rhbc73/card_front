@@ -65,7 +65,7 @@ class App extends Component {
   }
 
   filltable = () => {
-    axios.get("http://localhost:8080/cards/").then(data => {
+    axios.get("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/").then(data => {
       this.setState({
         dataSource: data.data
       });
@@ -81,14 +81,14 @@ class App extends Component {
         nickname: value.nickname
       };
       if (this.state.modalType === "add") {
-        axios.post("http://127.0.0.1:8080/cards/", data).then(msg => {
+        axios.post("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/", data).then(msg => {
           this.filltable();
           this.setState({ visible: false });
         });
       } else {
         axios
           .put(
-            "http://127.0.0.1:8080/cards/" + this.state.editRow.cardnumber,
+            "http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/" + this.state.editRow.cardnumber,
             data
           )
           .then(data => {
@@ -129,7 +129,7 @@ class App extends Component {
       cancelText: "No",
       onOk() {
         axios
-          .delete("http://127.0.0.1:8080/cards/" + row.cardnumber)
+          .delete("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/" + row.cardnumber)
           .then(data => {
             _this.filltable();
           });
