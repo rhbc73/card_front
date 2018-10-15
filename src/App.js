@@ -15,6 +15,10 @@ class App extends Component {
 
   columns = [
     {
+      dataIndex: "userid",
+      title: "User ID"
+    },
+    {
       dataIndex: "cardnumber",
       title: "Card Number"
     },
@@ -61,12 +65,14 @@ class App extends Component {
     editRow: {}
   };
 
+  userid = "000001";
+
   componentDidMount() {
     this.filltable();
   }
 
   filltable = () => {
-    axios.get("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/").then(data => {
+    axios.get("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/000001/cards/").then(data => {
       this.setState({
         dataSource: data.data
       });
@@ -82,14 +88,14 @@ class App extends Component {
         nickname: value.nickname
       };
       if (this.state.modalType === "add") {
-        axios.post("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/", data).then(msg => {
+        axios.post("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/000001/cards/", data).then(msg => {
           this.filltable();
           this.setState({ visible: false });
         });
       } else {
         axios
           .put(
-            "http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/" + this.state.editRow.cardnumber,
+            "http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/000001/cards/" + this.state.editRow.cardnumber,
             data
           )
           .then(data => {
@@ -130,7 +136,7 @@ class App extends Component {
       cancelText: "No",
       onOk() {
         axios
-          .delete("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cards/" + row.cardnumber)
+          .delete("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/000001/cards/" + row.cardnumber)
           .then(data => {
             _this.filltable();
           });
@@ -145,7 +151,7 @@ class App extends Component {
     .get("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cardtype/" + value)
     .then(data => {
       const type = '[type] ' + data.data.type + ' [subtype] ' + data.data.subtype;
-      message.success(type, 1)
+      message.success(type, 0.3)
     });
 
   }
@@ -200,6 +206,10 @@ class App extends Component {
           visible={this.state.visible}
         >
           <Form>
+          <FormItem label="UserID" {...formItemLayout}>
+              {(<Input type="number" value={this.userid} disabled="true" />)}
+            </FormItem>
+
             <FormItem label="Card Number" {...formItemLayout}>
               {getFieldDecorator("cardnumber", {
                 rules: [
