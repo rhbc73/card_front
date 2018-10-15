@@ -4,6 +4,7 @@ import axios from "axios";
 import { Table, Input, Row, Button, Modal, Form, message } from "antd";
 import "antd/dist/antd.css";
 
+const {Search} = Input;
 const FormItem = Form.Item;
 const { confirm } = Modal;
 
@@ -137,6 +138,18 @@ class App extends Component {
     });
   };
 
+  querycardtype = (value)=> {
+    if (value === '') return;
+
+    axios
+    .get("http://card2app.fhufmxx54e.us-east-2.elasticbeanstalk.com/cardtype/" + value)
+    .then(data => {
+      const type = '[type] ' + data.data.type + ' [subtype] ' + data.data.subtype;
+      message.success(type, 1)
+    });
+
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -149,17 +162,27 @@ class App extends Component {
         sm: { span: 16 }
       }
     };
+
     return (
       <div className="App">
         <Row>
+        <Search 
+          type="number"
+          style={{width: 300, marginLeft: 20, marginTop: 10, float: "left"}} 
+          placeholder="input credit card number"
+          onSearch={value=>this.querycardtype(value)}/>
+        </Row>
+
+        <Row>
           <Button
             type="primary"
-            style={{ marginLeft: 20 }}
+            style={{ marginLeft: 20, marginTop: 10, float: "left" }}
             onClick={() => this.modal("add")}
           >
             Add Card
           </Button>
         </Row>
+
         <Row style={{ paddingTop: 20 }}>
           <Table
             dataSource={this.state.dataSource}
